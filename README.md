@@ -19,6 +19,8 @@ NOTES:
 
 kISWeb adalah sebuah konstanta dalam kerangka kerja (framework) Flutter yang bernilai true jika aplikasi sedang dikompilasi atau dijalankan di platform web. Ini adalah alat bantu yang memungkinkan developer untuk menulis logika kode yang bisa mendeteksi apakah aplikasi tersebut berjalan di browser web atau tidak, sehingga dapat memberikan perilaku atau tampilan yang spesifik untuk platform tersebut. 
 
+kISweb hanya berguna untuk IOS atau Android
+
 Ascending yaitu dari A-Z kek bisa dibilang kalo ascending tuh dia yang pertama masuk yang keluar terakhir 
 Descending yaitu dari Z-A kalo Descending itu kek yang masuk A tapi yang keluar z duluan
 Array dalah kumpulan data dan kalo mau di akses pake index di dalam nya

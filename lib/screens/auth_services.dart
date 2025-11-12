@@ -33,7 +33,34 @@ class AuthServices {
       );
       // kalo succes maka akan di lempar ke data base cuman kalo eror kita bakal rethrow(catch)
     } catch (e) {
+      rethrow; 
+    }
+  }
+
+  // Regiter with email and password
+  Future<UserCredential> registerWithEmailAndPassword(String email, String password) async {
+    try {
+      return await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password
+      );
+    } catch (e) {
+      if (e is FirebaseAuthException) {
+        if (e.code == 'operation-not-allowed') {
+          throw 'Email/Password sign up is not enable. Please enable on firebase console';
+        }
+      }
       rethrow;
+    }
+  }
+  
+  // sign out
+  Future<void> signOut() async {
+    try {
+      await _auth.signOut();
+    } catch (e) {
+      rethrow;
+      // rethrow itu buat balik lagi ke halaman sebelum nya 
     }
   }
 }
