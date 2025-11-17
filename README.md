@@ -41,6 +41,7 @@ Flutter_image_compress : untuk mengkompres image agar ukurannya tidak terlalu be
 
 
 
+
 ini buat naro di realtime database bagian rulesnya
 {
   "rules": {
@@ -73,3 +74,9 @@ service cloud.firestore {
     }
   }
 }
+
+
+
+mounted adalah sebuah boleean/widget kita aktif dan berada pada widget tri
+
+controll spasi buat liat isinya scaffold
