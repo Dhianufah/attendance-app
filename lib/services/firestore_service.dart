@@ -1,0 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+class FirestoreService {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  // get attendance records for a user (real-time stream)
+  Stream<List<AttendanceRecord>> getAttendanceRecords(String userId) {
+    return ;
+  }
+}
