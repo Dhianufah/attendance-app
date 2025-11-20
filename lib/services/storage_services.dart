@@ -96,7 +96,7 @@ class StorageServices {
           .child(photoKey)
           .remove();
     } catch (e) {
-      // ignore id doesn't
+      // ignore id doesn't  exists
     }
   }
 }
