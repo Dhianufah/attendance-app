@@ -45,10 +45,11 @@ class CameraButton extends StatelessWidget {
       final XFile? photo = await picker.pickImage(
         source: ImageSource.camera,
         preferredCameraDevice: CameraDevice.front,
-          // ini buat kamre belakang 
+          // ini buat kamera depan pake front
         imageQuality: 70, //conpressed image
       );
 
+      //ini tuh kode biar kek nanti fotoyang di oleh bakal di jadiin string
       if (photo != null) {
         onImageCaptured(photo.path);
       }
