@@ -183,7 +183,15 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(height: 24),
               AttendanceCard(todayRecord: _todayRecord),
               SizedBox(height: 24),
-              ActionButton
+              ActionButton(
+                todayRecord: _todayRecord,
+                isLoading: _isLoading,
+                onCheckIn: () => _checkIn(),
+                onCheckOut: () => _checkOut(),
+                onCheckInWithPhoto: (Path) => _checkIn(photoPath: Path) ,
+                onCheckOutWithPhoto: (Path) => _checkOut(photoPath: Path) ,
+
+              )
             ],
           ),
         ),

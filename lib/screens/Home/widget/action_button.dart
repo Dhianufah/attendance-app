@@ -33,10 +33,9 @@ class ActionButton extends StatelessWidget {
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: hasCheckedIn ? _buildCheckButtons() : _buildChecInkButton,
+      children: hasCheckedIn ? _buildCheckOutButtons() : _buildChecInkButtons(),
     );
   }
-
   Widget _buildCompletedCard() {
     return Card(
       elevation: 2,
