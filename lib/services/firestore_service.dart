@@ -1,11 +1,13 @@
 import 'package:attendance_app/models/attenndance_record.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+
 class FirestoreService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-  // get attendance records for a user (real-time stream)
-  Stream<List<AttenndanceRecord>> getAttendanceRecord(String userId) {
+  // firestore untuk menyimpan semua data, database realtime => yg berkaitan dg gambar saja
+  // get attendance records for user (real-time stream)
+  Stream<List<AttenndanceRecord>> getAttendanceRecords(String userId) {
+    // get attendance record
     return _firestore
         .collection('attendance')
         .where('user_id', isEqualTo: userId)
@@ -13,15 +15,12 @@ class FirestoreService {
         .snapshots()
         .map((snapshot) {
           return snapshot.docs
-              .map(
-                (doc) =>
-                    AttenndanceRecord.fromJson({...doc.data(), 'id': doc.id}),
-              )
+              .map((doc) => AttenndanceRecord.fromJson({...doc.data(), 'id': doc.id}))
               .toList();
         });
   }
 
-  // get today's attendance record (real-time stream)
+  // today's attendance record (real-time screen)
   Stream<AttenndanceRecord?> getTodayRecordStream(String userId) {
     final now = DateTime.now();
     final startOfDay = DateTime(now.year, now.month, now.day);
@@ -34,21 +33,21 @@ class FirestoreService {
         .limit(10)
         .snapshots()
         .map((snapshot) {
-          //  filter today's record on client side
+          // filter today record on client side
           for (var doc in snapshot.docs) {
             final data = doc.data();
             final checkInTime = DateTime.parse(data['check_in_time'] as String);
 
-            if (checkInTime.isAfter(startOfDay) &&
-                checkInTime.isBefore(endOfDay))
-              ;
-            return AttenndanceRecord.fromJson({...data, 'id': doc.id});
+            if (checkInTime.isAfter(startOfDay) && checkInTime.isBefore(endOfDay)) {
+              return AttenndanceRecord.fromJson({...data, 'id': doc.id});
+            }
           }
+
           return null;
         });
   }
 
-  // get today's attendance record (one-time fetch)
+  // get today's attendance record (one-time fetch) => pemanggilannya hanya sekali
   Future<AttenndanceRecord?> getTodayRecord(String userId) async {
     final today = DateTime.now();
     final startOfDay = DateTime(today.year, today.month, today.day);
@@ -57,46 +56,39 @@ class FirestoreService {
     final querySnapshot = await _firestore
         .collection('attendance')
         .where('user_id', isEqualTo: userId)
-        .where('date', isGreaterThanOrEqualTo: Timestamp.fromDate(startOfDay))
+        .where('date', isGreaterThan: Timestamp.fromDate(startOfDay))
         .where('date', isLessThan: Timestamp.fromDate(endOfDay))
         .get();
 
-    if (querySnapshot.docs.isEmpty) return null;
+        if (querySnapshot.docs.isEmpty) return null;
 
-    return AttenndanceRecord.fromJson({
-      ...querySnapshot.docs.first.data(),
-      'id': querySnapshot.docs.first.id,
-    });
+        return AttenndanceRecord.fromJson(
+          {...querySnapshot.docs.first.data(), 'id': querySnapshot.docs.first.id}
+        );
   }
 
-  // create new attendance record
+  // create new attendance record 
   Future<String> createAttendanceRecord(AttenndanceRecord record) async {
-    final docRef = await _firestore
-        .collection('attendance')
-        .add(record.toJson());
+    final docRef = await _firestore.collection('attendance').add(record.toJson());
     return docRef.id;
-
-    // update existing attendance record
-    Future<void> uploadAtendanceRecord(AttenndanceRecord record) async {
-      if (record.id== '1' ||) {
-        await _firestore
-        .collection('attendance')
-        .doc(record.id)
-        .update(record.toJson());
-      }
-    }
   }
 
-  // create or update attendance record
+  // updtae existing attendance record
+  Future<void> updateAttendanceRecord(AttenndanceRecord record)async {
+    await _firestore
+       .collection('attendance')
+       .doc(record.id)
+       .update(record.toJson());
+  }
+
+ // create or update attendance record
   Future<void> saveAttendanceRecord(AttenndanceRecord record) async {
     if (record.id == '1' || record.id.isEmpty) {
-      // new record for creating auto generate ID
+      //new record for creating auto geberated id
       await createAttendanceRecord(record);
     } else {
-       // update existing record
-      return updateAttendanceRecord(record);
-
-
+      //update existing record 
+      await updateAttendanceRecord(record);
     }
   }
 }
