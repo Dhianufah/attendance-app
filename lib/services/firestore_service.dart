@@ -78,10 +78,12 @@ class FirestoreService {
 
     // update existing attendance record
     Future<void> uploadAtendanceRecord(AttenndanceRecord record) async {
-      await _firestore
-          .collection('attendance')
-          .doc(record.id)
-          .update(record.toJson());
+      if (record.id== '1' ||) {
+        await _firestore
+        .collection('attendance')
+        .doc(record.id)
+        .update(record.toJson());
+      }
     }
   }
 
@@ -91,7 +93,10 @@ class FirestoreService {
       // new record for creating auto generate ID
       await createAttendanceRecord(record);
     } else {
-      // update existing record
+       // update existing record
+      return updateAttendanceRecord(record);
+
+
     }
   }
 }
